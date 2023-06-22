@@ -56,7 +56,31 @@ public class TodosTest {
     }
 
     @Test
-    public void shouldSearchByContainedJustOneOfThreeTasks() {
+    public void shouldSearchByContainedTwoOfThreeTasks() {
+        SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб", "Нить"};
+        Epic epic = new Epic(55, subtasks);
+
+        Meeting meeting = new Meeting(
+                555,
+                "Выкатка 3ей версии приложения",
+                "Оплата покупки",
+                "Во вторник после обеда"
+        );
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {simpleTask, epic};
+        Task[] actual = todos.search("ить");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchByContainedOneOfThreeTasks() {
         SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
         String[] subtasks = {"Молоко", "Яйца", "Хлеб", "Нить"};
         Epic epic = new Epic(55, subtasks);
@@ -75,7 +99,31 @@ public class TodosTest {
         todos.add(meeting);
 
         Task[] expected = {meeting};
-        Task[] actual = todos.search("3");
+        Task[] actual = todos.search("Опл");
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void shouldSearchNoContained() {
+        SimpleTask simpleTask = new SimpleTask(5, "Позвонить родителям");
+        String[] subtasks = {"Молоко", "Яйца", "Хлеб", "Нить"};
+        Epic epic = new Epic(55, subtasks);
+
+        Meeting meeting = new Meeting(
+                555,
+                "Выкатка 3ей версии приложения",
+                "Оплатить покупки",
+                "Во вторник после обеда"
+        );
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+        todos.add(meeting);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Без");
         Assertions.assertArrayEquals(expected, actual);
     }
 }
